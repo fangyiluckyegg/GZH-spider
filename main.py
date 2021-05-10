@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*- 
+# https://www.cnblogs.com/xiao-apple36/p/9447877.html
 from selenium import webdriver
 import time
 import json
@@ -7,7 +8,7 @@ import re
 import random
 
 #微信公众号账号
-user="luckygg@139.com"
+user="luckyegg@139.com"
 #公众号密码
 password="fangyi791021"
 #设置要爬取的公众号列表
@@ -20,7 +21,7 @@ def weChat_login():
 
     #用webdriver启动谷歌浏览器
     print("启动浏览器，打开微信公众号登录界面")
-    driver = webdriver.Chrome(executable_path='C:/chromedriver')
+    driver = webdriver.Chrome(executable_path='D:/WorkSpace/GZH-spider/chromedriver')
     #打开微信公众号登录页面
     driver.get('https://mp.weixin.qq.com/')
     
@@ -29,8 +30,6 @@ def weChat_login():
     print("正在输入微信公众号登录账号和密码......")
     #清空账号框中的内容
     driver.find_element_by_xpath("./*//input[@name='account']").clear()
-    #driver.find_element_by_name("account").clear()
-    print("45645645645..")
     #自动填入登录用户名
     driver.find_element_by_xpath("./*//input[@name='account']").send_keys(user)
     #清空密码框中的内容
@@ -38,11 +37,10 @@ def weChat_login():
     #自动填入登录密码
     driver.find_element_by_xpath("./*//input[@name='password']").send_keys(password)
 
-
-
     # 在自动输完密码之后需要手动点一下记住我
     print("请在登录界面点击:记住账号")
-    time.sleep(10)
+    print(user+password)
+    time.sleep(5)
     #自动点击登录按钮进行登录
     #driver.find_element_by_xpath("./*//a[@id='loginBt']").click()
     driver.find_element_by_xpath("./*//a[@class='btn_login']").click()
@@ -147,12 +145,16 @@ def get_content(query):
         #获取每一页文章的标题和链接地址，并写入本地文本中
         query_fakeid_response = requests.get(appmsg_url, cookies=cookies, headers=header, params=query_id_data)
         fakeid_list = query_fakeid_response.json().get('app_msg_list')
+        #print(fakeid_list)
         for item in fakeid_list:
+            content_date=item.get('update_time')  
+            otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(content_date))
             content_link=item.get('link')
             content_title=item.get('title')
             fileName=query+'.txt'
             with open(fileName,'a',encoding='utf-8') as fh:
-                fh.write(content_title+":\n"+content_link+"\n")
+                #fh.write(content_title+":\n"+content_link+"\n")
+                fh.write(otherStyleTime+"\n"+content_title+"\n"+content_link+"\n")        
         num -= 1
         begin = int(begin)
         begin+=5
