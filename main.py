@@ -147,7 +147,7 @@ def get_content(query):
         fakeid_list = query_fakeid_response.json().get('app_msg_list')
         #print(fakeid_list)
         for item in fakeid_list:
-            content_date=item.get('update_time')  
+            content_date=item.get('create_time')  
             otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(content_date))
             content_link=item.get('link')
             content_title=item.get('title')
