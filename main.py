@@ -12,7 +12,7 @@ user="luckyegg@139.com"
 #公众号密码
 password="fangyi791021"
 #设置要爬取的公众号列表
-gzlist=['南太湖优店']
+gzlist=['爱湖州']
 
 def weChat_login():
 #登录微信公众号，获取登录之后的cookies信息，并保存到本地文本中
@@ -39,7 +39,6 @@ def weChat_login():
 
     # 在自动输完密码之后需要手动点一下记住我
     print("请在登录界面点击:记住账号")
-    print(user+password)
     time.sleep(5)
     #自动点击登录按钮进行登录
     #driver.find_element_by_xpath("./*//a[@id='loginBt']").click()
@@ -145,7 +144,7 @@ def get_content(query):
         #获取每一页文章的标题和链接地址，并写入本地文本中
         query_fakeid_response = requests.get(appmsg_url, cookies=cookies, headers=header, params=query_id_data)
         fakeid_list = query_fakeid_response.json().get('app_msg_list')
-        #print(fakeid_list)
+        print(fakeid_list)
         for item in fakeid_list:
             content_date=item.get('create_time')  
             otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(content_date))
