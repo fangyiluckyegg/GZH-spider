@@ -162,7 +162,9 @@ def get_content(query):
         begin+=1
         time.sleep(2)
 
+#https://www.cnblogs.com/supery007/p/8136295.html
 def sendmsg(openid,msg):
+    #access_token = get_access_token()
     body = {
         "touser": openid,
         "msgtype": "text",
@@ -170,6 +172,16 @@ def sendmsg(openid,msg):
             "content": msg
         }
     }
+    response = requests.post(
+        url="https://api.weixin.qq.com/cgi-bin/message/custom/send",
+        params={
+            'access_token': token
+        },
+        data=bytes(json.dumps(body, ensure_ascii=False), encoding='utf-8')
+    )
+    # 这里可根据回执code进行判定是否发送成功(也可以根据code根据错误信息)
+    result = response.json()
+    print(result)
 
 if __name__=='__main__':
     try:
