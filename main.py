@@ -144,7 +144,7 @@ def get_content(query):
         #获取每一页文章的标题和链接地址，并写入本地文本中
         query_fakeid_response = requests.get(appmsg_url, cookies=cookies, headers=header, params=query_id_data)
         fakeid_list = query_fakeid_response.json().get('app_msg_list')
-        print(fakeid_list)
+        #print(fakeid_list)
         for item in fakeid_list:
             content_date=item.get('create_time')  
             otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(content_date))
