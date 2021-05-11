@@ -12,7 +12,8 @@ user="luckyegg@139.com"
 #公众号密码
 password="fangyi791021"
 #设置要爬取的公众号列表
-gzlist=['爱湖州']
+#gzlist=['湖州旅游','爱湖州','湖州银泰城','湖州微生活','南太湖优店']
+gzlist=['湖州旅游']
 
 def weChat_login():
 #登录微信公众号，获取登录之后的cookies信息，并保存到本地文本中
@@ -122,7 +123,8 @@ def get_content(query):
     #获取文章总数
     max_num = appmsg_response.json().get('app_msg_cnt')
     #每页至少有5条，获取文章总的页数，爬取时需要分页爬
-    num = int(int(max_num) / 5)
+    #num = int(int(max_num) / 5)
+    num = 1
     #起始页begin参数，往后每页加5
     begin = 0
     while num + 1 > 0 :
@@ -156,8 +158,18 @@ def get_content(query):
                 fh.write(otherStyleTime+"\n"+content_title+"\n"+content_link+"\n")        
         num -= 1
         begin = int(begin)
-        begin+=5
+        #begin+=5
+        begin+=1
         time.sleep(2)
+
+def sendmsg(openid,msg):
+    body = {
+        "touser": openid,
+        "msgtype": "text",
+        "text": {
+            "content": msg
+        }
+    }
 
 if __name__=='__main__':
     try:
@@ -167,7 +179,8 @@ if __name__=='__main__':
         for query in gzlist:
             #爬取微信公众号文章，并存在本地文本中
             print("开始爬取公众号："+query)
+            sendmsg ('方易',query)
             get_content(query)
-            print("爬取完成")
+            print("爬取完成")  
     except Exception as e:
         print(str(e))
