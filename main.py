@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-# https://www.cnblogs.com/xiao-apple36/p/9447877.html
+# python爬取微信公众号:https://www.cnblogs.com/xiao-apple36/p/9447877.html
 from selenium import webdriver
 import time
 import json
@@ -19,7 +19,6 @@ def weChat_login():
 #登录微信公众号，获取登录之后的cookies信息，并保存到本地文本中
     #定义一个空的字典，存放cookies内容
     post={}
-
     #用webdriver启动谷歌浏览器
     print("启动浏览器，打开微信公众号登录界面")
     driver = webdriver.Chrome(executable_path='D:/WorkSpace/GZH-spider/chromedriver')
@@ -154,17 +153,40 @@ def get_content(query):
             content_title=item.get('title')
             fileName=query+'.txt'
             with open(fileName,'a',encoding='utf-8') as fh:
-                #fh.write(content_title+":\n"+content_link+"\n")
-                fh.write(otherStyleTime+"\n"+content_title+"\n"+content_link+"\n")        
+                #fh.write(otherStyleTime+"\n"+content_title+"\n"+content_link+"\n")   
+                m_content = otherStyleTime+"\n"+content_title+"\n"+content_link+"\n"
+                fh.write(m_content)  
+                sendmsg ('olGwn6-YCRvXwHPh4wUlF0LJh2j8',m_content)   
         num -= 1
         begin = int(begin)
         #begin+=5
         begin+=1
         time.sleep(2)
+    
+#Python 微信公众号发送消息:https://www.cnblogs.com/supery007/p/8136295.html
+#微信公众平台测试帐号申请地址：https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login
+def get_access_token():
+    """
+    获取微信全局接口的凭证(默认有效期俩个小时)
+    如果不每天请求次数过多, 通过设置缓存即可
+    """
+    result = requests.get(
+        url="https://api.weixin.qq.com/cgi-bin/token",
+        params={
+            "grant_type": "client_credential",
+            "appid": "wx9cf8011937eb104f",
+            "secret": "aa71262af5c40b6c6f36c5cd225dc42d",
+        }
+    ).json()
 
-#https://www.cnblogs.com/supery007/p/8136295.html
+    if result.get("access_token"):
+        access_token = result.get('access_token')
+    else:
+        access_token = None
+    return access_token
+
 def sendmsg(openid,msg):
-    #access_token = get_access_token()
+    access_token = get_access_token()
     body = {
         "touser": openid,
         "msgtype": "text",
@@ -172,11 +194,12 @@ def sendmsg(openid,msg):
             "content": msg
         }
     }
+    #query_fakeid_response = requests.get(appmsg_url, cookies=cookies, headers=header, params=query_id_data)
     response = requests.post(
         url="https://api.weixin.qq.com/cgi-bin/message/custom/send",
         params={
-            'access_token': token
-        },
+            'access_token': access_token
+            },
         data=bytes(json.dumps(body, ensure_ascii=False), encoding='utf-8')
     )
     # 这里可根据回执code进行判定是否发送成功(也可以根据code根据错误信息)
@@ -186,12 +209,11 @@ def sendmsg(openid,msg):
 if __name__=='__main__':
     try:
         #登录微信公众号，获取登录之后的cookies信息，并保存到本地文本中
-        weChat_login()
+        #weChat_login()
         #登录之后，通过微信公众号后台提供的微信公众号文章接口爬取文章
         for query in gzlist:
             #爬取微信公众号文章，并存在本地文本中
             print("开始爬取公众号："+query)
-            sendmsg ('方易',query)
             get_content(query)
             print("爬取完成")  
     except Exception as e:
