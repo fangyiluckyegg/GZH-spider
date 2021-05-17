@@ -27,7 +27,7 @@ def weChat_login():
     #定义一个空的字典，存放cookies内容
     post={}
     #用webdriver启动谷歌浏览器，打开微信公众号登录界面
-    driver = webdriver.Chrome(executable_path='D:/WorkSpace/GZH-spider/chromedriver')
+    driver = webdriver.Chrome(executable_path='.//chromedriver')
     driver.get('https://mp.weixin.qq.com/')
     time.sleep(5)
     
