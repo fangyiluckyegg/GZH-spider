@@ -17,7 +17,7 @@ import random
 
 #微信公众号账号与密码
 user="luckyegg@139.com"
-password="fangyi791021"
+password="XXXXXXXXXXXX"
 #设置要爬取的公众号列表
 #gzlist=['湖州旅游','爱湖州','湖州银泰城','湖州微生活','南太湖优店']
 gzlist=['湖州旅游']
